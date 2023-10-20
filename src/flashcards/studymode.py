@@ -1,19 +1,21 @@
 import random
+import samplesets 
+from pprint import pprint
 
 def createQuiz(deck):
-    print(deck)
+    pprint(deck)
     terms = []
     definitions = []
     newquiz = []
 
     # Insert all terms and their respective correct definitions into the quiz
-    for i in range(len(deck['flashcards'])):
+    for i in range(len(deck)):
         newquiz.append({
-            'question': deck['flashcards'][i]['t'],
-            'answeroptions': [{'option': deck['flashcards'][i]['d'], 'isCorrect': True}]
+            'question': deck[i]['t'],
+            'answeroptions': [{'option': deck[i]['d'], 'isCorrect': True}]
         })
-        terms.append(deck['flashcards'][i]['t'])
-        definitions.append(deck['flashcards'][i]['d'])
+        terms.append(deck[i]['t'])
+        definitions.append(deck[i]['d'])
 
     # Go through all quiz questions
     for i in range(len(newquiz)):
@@ -45,5 +47,8 @@ def createQuiz(deck):
 
     # Shuffle quiz questions and return quiz
     random.shuffle(newquiz)
-    print('finished creating quiz:', newquiz)
+    print('finished creating quiz:')
+    pprint(newquiz)
     return newquiz
+
+createQuiz(samplesets.sampleSet(0))

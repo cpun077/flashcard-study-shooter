@@ -50,7 +50,7 @@ class Run:
             self.player.weapon.draw(self.screen)
             self.player.update()
 
-            #self.screen.blit(a.img, a.rect)
+            self.screen.blit(a.img, a.rect)
             # Flip the display
             pygame.display.flip()
 

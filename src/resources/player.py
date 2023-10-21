@@ -9,7 +9,7 @@ class Player:
 		self.y = y
 		self.ammo = 10
 		self.speed = 3
-		self.img = pygame.image.load("src/images/player.png")
+		self.img = pygame.image.load("images/player.png")
 		self.img = pygame.transform.smoothscale(self.img.convert_alpha(), (w, h))
 		self.drawn_img = self.img
 		self.rect = self.drawn_img.get_rect(center=(self.x, self.y))

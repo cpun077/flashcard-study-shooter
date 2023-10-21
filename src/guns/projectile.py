@@ -7,7 +7,7 @@ class Projectile:
     def __init__(self, starting_x, starting_y, angle):
         self.x = starting_x
         self.y = starting_y
-        self.velocity = 500
+        self.velocity = 800
         self.img = pygame.image.load("images/bullet.png").convert_alpha()
         self.img = pygame.transform.smoothscale(
             self.img, (self.img.get_width() * 0.4, self.img.get_height() * 0.4)
@@ -15,7 +15,7 @@ class Projectile:
         self.angle = angle
         self.img = pygame.transform.rotozoom(self.img, -math.degrees(self.angle), 1)
         self.img.convert_alpha()
-        self.tot_dis = 300
+        self.tot_dis = 800
         self.dis_traveled = 0
         self.dead = False
         self.id = "proj"

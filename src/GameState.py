@@ -21,82 +21,95 @@ class GameState:
 	def initialize_random(self, num=1000):
 		for i in range(num):
 			rand_num = random.randint(1, 4)
+
 			if(rand_num == 1):
-				ammo = Ammo(random.randint(1, WORLD_WIDTH), random.randint(1, WORLD_WIDTH), self.ammo_size, self.ammo_size)
-				while(self.colliding(ammo)):
-					ammo = Ammo(random.randint(1, WORLD_WIDTH), random.randint(1, WORLD_WIDTH), self.ammo_size, self.ammo_size)
-				self.ammo.append(ammo)
+				x = random.randint(1, WORLD_WIDTH)
+				y = random.randint(1, WORLD_HEIGHT)
+				while(self.colliding(x, y, self.ammo_size, self.ammo_size)):
+					x = random.randint(1, WORLD_WIDTH)
+					y = random.randint(1, WORLD_HEIGHT)
+				self.ammo.append((x, y))
+
 			elif(rand_num == 2):
-				rock = Rock(random.randint(1, WORLD_WIDTH), random.randint(1, WORLD_WIDTH), self.rock_size, self.rock_size)
-				while(self.colliding(rock)):
-					rock = Rock(random.randint(1, WORLD_WIDTH), random.randint(1, WORLD_WIDTH), self.rock_size, self.rock_size)
-				self.rocks.append(rock)
+				x = random.randint(1, WORLD_WIDTH)
+				y = random.randint(1, WORLD_HEIGHT)
+				while(self.colliding(x, y, self.tree_size, self.tree_size)):
+					x = random.randint(1, WORLD_WIDTH)
+					y = random.randint(1, WORLD_HEIGHT)
+				self.trees.append((x, y))
+
 			elif(rand_num == 3):
-				tree = Tree(random.randint(1, WORLD_WIDTH), random.randint(1, WORLD_WIDTH), self.tree_size, self.tree_size)
-				while(self.colliding(tree)):
-					tree = Tree(random.randint(1, WORLD_WIDTH), random.randint(1, WORLD_WIDTH), self.tree_size, self.tree_size)
-				self.trees.append(tree)
+				x = random.randint(1, WORLD_WIDTH)
+				y = random.randint(1, WORLD_HEIGHT)
+				while(self.colliding(x, y, self.rock_size, self.rock_size)):
+					x = random.randint(1, WORLD_WIDTH)
+					y = random.randint(1, WORLD_HEIGHT)
+				self.rocks.append((x, y))
+
 			elif(rand_num == 4):
-				shield = Shield(random.randint(1, WORLD_WIDTH), random.randint(1, WORLD_WIDTH), self.shield_size, self.shield_size)
-				while(self.colliding(shield)):
-					shield = Shield(random.randint(1, WORLD_WIDTH), random.randint(1, WORLD_WIDTH), self.shield_size, self.shield_size)
-				self.shields.append(shield)
+				x = random.randint(1, WORLD_WIDTH)
+				y = random.randint(1, WORLD_HEIGHT)
+				while(self.colliding(x, y, self.shield_size, self.shield_size)):
+					x = random.randint(1, WORLD_WIDTH)
+					y = random.randint(1, WORLD_HEIGHT)
+				self.shields.append((x, y))
 
-	def colliding(self, resource):
-		rect1 = resource.get_rect()
-		for ammo in self.ammo:
-			if rect1.colliderect(ammo.get_rect()):
+	def rect_collide(self, b1, b2):
+		x1, y1, w1, h1 = b1
+		x2, y2, w2, h2 = b2
+		if (x1 < x2 + w2 and x1 + w1 > x2 and y1 < y2 + h2 and y1 + h1 > y2):
+			return True
+
+	def colliding(self, x, y, w, h):
+		for x1, y1 in self.ammo:
+			if(self.rect_collide((w, y, w, h), (x1, y1, self.ammo_size, self.ammo_size))):
 				return True
 
-		for rock in self.rocks:
-			if rect1.colliderect(rock.get_rect()):
+		for x1, y1 in self.trees:
+			if(self.rect_collide((w, y, w, h), (x1, y1, self.tree_size, self.tree_size))):
 				return True
 
-		for shield in self.shields:
-			if rect1.colliderect(shield.get_rect()):
+		for x1, y1 in self.rocks:
+			if(self.rect_collide((w, y, w, h), (x1, y1, self.rock_size, self.rock_size))):
 				return True
 
-		for tree in self.trees:
-			if rect1.colliderect(tree.get_rect()):
+		for x1, y1 in self.shields:
+			if(self.rect_collide((w, y, w, h), (x1, y1, self.shield_size, self.shield_size))):
 				return True
-
-		return False
 
 	def encode_initial_data(self):
 		t = []
-		for tree in self.trees:
-			t.append(f"{tree.x} {tree.y}")
+		for x, y in self.trees:
+			t.append(f"{x} {y}")
 
 		r = []
-		for rock in self.rocks:
-			r.append(f"{rock.x} {rock.y}")
+		for x, y in self.rocks:
+			r.append(f"{x} {y}")
 
 		a = []
-		for ammo in self.ammo:
-			a.append(f"{ammo.x} {ammo.y}")
+		for x, y in self.ammo:
+			a.append(f"{x} {y}")
 
 		s = []
-		for shield in self.shields:
-			s.append(f"{shield.x} {shield.y}")
+		for x, y in self.shields:
+			s.append(f"{x} {y}")
 
-		return [a, t, r, s]
+		return str([a, t, r, s])
 
-	def encode_data(self):
-		a = []
-		for ammo in self.ammo:
-			a.append(f"{ammo.x} {ammo.y} {ammo.w} {ammo.h}")
-
-		s = []
-		for shield in self.shields:
-			s.append(f"{shield.x} {shield.y} {shield.w} {shield.h}")
-
-		return [s, s]
+	def send_myinfo(self, data):
+		player, projectile = data
+		p = [round(player.x), round(player.y), player.angle]
+		proj = []
+		for pr in projectile:
+			proj.append([round(pr.x), round(pr.y), pr.angle])
+		return str([p, proj])
 
 	def get_xy(self, st):
 		s = st.split()
 		return int(s[0]), int(s[1])
 
 	def decode_initial_data(self, data):
+		data = eval(data)
 		a = data[0]
 		t = data[1]
 		r = data[2]

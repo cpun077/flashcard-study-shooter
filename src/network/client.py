@@ -3,7 +3,7 @@ import threading
 import sys
 import os
 import signal
-
+import atexit
 
 class Client:
     def __init__(self):
@@ -13,52 +13,45 @@ class Client:
         self.port = 8002
         self.addr = (self.host, self.port)
 
-    def send(self):
-        while True:
-            try:
-                inp = input()
-                sys.stdout.write("\x1b[1A\x1b[2K")
-                self.sock.sendall(inp.encode())
-                if inp == "q":
-                    self.sock.close()
-                    return
-            except:
-                self.sock.close()
-                return
+    def send(self, data):
+        try:
+            sys.stdout.write("\x1b[1A\x1b[2K")
+            self.sock.sendall(data.encode())
+        except:
+            self.sock.close()
+            return
 
     def recv(self):
-        while True:
-            try:
-                data = self.sock.recv(1024).decode()
-                print(data)
-                if data == "Server shutting down!":
-                    self.sock.close()
-                    os._exit(1)
-                    return
-            except:
+        try:
+            data = self.sock.recv(1024).decode()
+            print(data)
+            if data == "Server shutting down!":
                 self.sock.close()
                 os._exit(1)
                 return
+        except:
+            self.sock.close()
+            os._exit(1)
+            return
+        return data
 
     def kill_client(self, sig, frame):
         self.sock.sendall("q".encode())
+        print("hi")
         self.sock.close()
         self.event.set()
-        os._exit()
+        os._exit(-1)
 
     def start(self):
-
         name = sys.argv[1]
         self.sock.connect(self.addr)
         self.sock.sendall(name.encode())
         signal.signal(signal.SIGINT, self.kill_client)
         signal.signal(signal.SIGHUP, self.kill_client)
-        send_msg = threading.Thread(target=self.send)
-        recv_msg = threading.Thread(target=self.recv)
-        send_msg.start()
-        recv_msg.start()
 
 
 if __name__ == "__main__":
     client = Client()
     client.start()
+    while True:
+        pass

@@ -8,12 +8,13 @@ class Gun:
         self.y = y
         self.id = 'gun'
         self.img = img
+        self.drawn_img = img
         self.ammo_cap = ammo_cap
         self.ammo = ammo_cap
         self.angle = 0
         self.prev_angle = 0
         self.fire_rate = fire_rate
-        self.nr = self.img.get_rect(center=(self.x, self.y))
+        self.nr = self.drawn_img.get_rect(center=(self.x, self.y))
         self.rotate_m = False
 
     def shoot(self):
@@ -34,10 +35,10 @@ class Gun:
 
     def draw(self, screen):
         if self.rotate_m:
-            self.img, self.nr = self.rot()
+            self.drawn_img, self.nr = self.rot()
             self.prev_angle = self.angle
             self.angle = 0
-        screen.blit(self.img, self.nr)
+        screen.blit(self.drawn_img, self.nr)
 
     def get_angle(self):
         return(self.angle)

@@ -12,24 +12,25 @@ class Projectile:
         self.img = pygame.transform.smoothscale(
             self.img, (self.img.get_width() * 0.4, self.img.get_height() * 0.4)
         )
+        self.img.convert_alpha()
         self.angle = angle
-        self.img = pygame.transform.rotozoom(self.img, -math.degrees(self.angle), 1)
         self.tot_dis = 300
         self.dis_traveled = 0
         self.dead = False
         self.id = "proj"
-        self.nr = self.img.get_rect(center=self.img.get_rect(center=(self.x, self.y)).center)
 
     def move_projectile(self, delta_time):
         if self.angle != None:
             self.x += math.cos(self.angle) * self.velocity * delta_time
             self.y += math.sin(self.angle) * self.velocity * delta_time
-            self.nr = self.img.get_rect(center=self.img.get_rect(center=(self.x, self.y)).center)
             self.dis_traveled += self.velocity * delta_time
 
     def draw(self, screen, delta_time):
         self.move_projectile(delta_time)
-        screen.blit(self.img, self.nr)
+        screen.blit(
+            self.img,
+            (self.x - self.img.get_width() / 2, self.y - self.img.get_height() / 2),
+        )
 
     def projectile_dead(self):
         if self.dis_traveled >= self.tot_dis or self.dead == True:

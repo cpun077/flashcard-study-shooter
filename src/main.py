@@ -36,6 +36,7 @@ class Run:
                     running = False
             self.screen.fill((255, 255, 255))
             self.player.weapon.set_angle()
+            self.player.set_angle()
 
             if (pygame.mouse.get_pressed()[0]):
                 player_x, player_y = self.player.weapon.get_pos()
@@ -45,12 +46,11 @@ class Run:
             for proj in projs:
                 proj.draw(self.screen, delta_time)
                 
-
+            self.player.draw(self.screen)
             self.player.weapon.draw(self.screen)
             self.player.update()
 
-            self.screen.blit(self.player.img, self.player.rect)
-            self.screen.blit(a.img, a.rect)
+            #self.screen.blit(a.img, a.rect)
             # Flip the display
             pygame.display.flip()
 

@@ -8,7 +8,7 @@ class Projectile:
         self.x = starting_x
         self.y = starting_y
         self.velocity = 500
-        self.img = pygame.image.load("images/bullet.png").convert_alpha()
+        self.img = pygame.image.load("src/images/bullet.png").convert_alpha()
         self.img = pygame.transform.smoothscale(
             self.img, (self.img.get_width() * 0.4, self.img.get_height() * 0.4)
         )

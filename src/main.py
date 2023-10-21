@@ -29,7 +29,7 @@ class Run:
         self.localx = 0
         self.localy = 0
         self.game_state = GameState()
-        self.game_state.initialize_random(2000)
+        self.game_state.initialize_random(5000)
         #self.bg = self.background
 
 
@@ -66,16 +66,16 @@ class Run:
 
     def render_game_state(self):
         for ammo in self.game_state.ammo:
-            if (ammo.x > self.player.x - WIDTH and ammo.x < self.player.x + WIDTH and ammo.y < self.player.y + HEIGHT/1.5 and ammo.y > self.player.y - HEIGHT/1.5):
+            if (ammo.x > self.player.x - WIDTH/1.5 and ammo.x < self.player.x + WIDTH/1.5 and ammo.y < self.player.y + HEIGHT/1.5 and ammo.y > self.player.y - HEIGHT/1.5):
                 self.screen.blit(ammo.img, (ammo.x - self.player.x + WIDTH / 2 - ammo.w / 2, ammo.y - self.player.y + HEIGHT / 2 - ammo.h / 2))
         for rock in self.game_state.rocks:
-            if (rock.x > self.player.x - WIDTH and rock.x < self.player.x + WIDTH and rock.y < self.player.y + HEIGHT/1.5 and rock.y > self.player.y - HEIGHT/1.5):
+            if (rock.x > self.player.x - WIDTH/1.5 and rock.x < self.player.x + WIDTH/1.5 and rock.y < self.player.y + HEIGHT/1.5 and rock.y > self.player.y - HEIGHT/1.5):
                 self.screen.blit(rock.img, (rock.x - self.player.x + WIDTH / 2 - rock.w / 2, rock.y - self.player.y + HEIGHT / 2 - rock.h / 2))
         for shield in self.game_state.shields:
-            if (shield.x > self.player.x - WIDTH and shield.x < self.player.x + WIDTH and shield.y < self.player.y + HEIGHT/1.5 and shield.y > self.player.y - HEIGHT/1.5):
+            if (shield.x > self.player.x - WIDTH/1.5 and shield.x < self.player.x + WIDTH/1.5 and shield.y < self.player.y + HEIGHT/1.5 and shield.y > self.player.y - HEIGHT/1.5):
                 self.screen.blit(shield.img, (shield.x - self.player.x + WIDTH / 2 - shield.w / 2, shield.y - self.player.y + HEIGHT / 2 - shield.h / 2))
         for tree in self.game_state.trees:
-            if (tree.x > self.player.x - WIDTH and tree.x < self.player.x + WIDTH and tree.y < self.player.y + HEIGHT/1.5 and tree.y > self.player.y - HEIGHT/1.5):
+            if (tree.x > self.player.x - WIDTH/1.5 and tree.x < self.player.x + WIDTH/1.5 and tree.y < self.player.y + HEIGHT/1.5 and tree.y > self.player.y - HEIGHT/1.5):
                 self.screen.blit(tree.img, (tree.x - self.player.x + WIDTH / 2 - tree.w / 2, tree.y - self.player.y + HEIGHT / 2 - tree.h / 2))
           
     def run(self):

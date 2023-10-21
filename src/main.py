@@ -1,54 +1,56 @@
-# Simple pygame program
-
-# Import and initialize the pygame library
 import pygame
 import time
 from guns.pistol import Pistol
 from guns.projectile import Projectile
+from resources.player import Player
+
 pygame.init()
 
-# Set up the drawing window
-screen = pygame.display.set_mode([500, 500])
+WIDTH = 1200
+HEIGHT = 800
 
-clock = pygame.time.Clock()
-test= Pistol(100, 100)
-projs = []
+class Run:
+    def __init__(self):
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        pygame.display.set_caption("EduShoot")
+        self.clock = pygame.time.Clock()
+        self.player = Player(600, 400, 50, 50)
 
-# Run until the user asks to quit
-running = True
-previous_time = time.perf_counter()
-while running:
 
-    delta_time = time.perf_counter() - previous_time
-    # Did the user click the window close button?
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    def run(self):
+        previous_time = time.perf_counter()
+        running = True
+        projs = []
+        while running:
+            delta_time = time.perf_counter() - previous_time
+            previous_time = time.perf_counter()
 
-    # Fill the background with white
-    screen.fill((255, 255, 255))
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+            self.screen.fill((255, 255, 255))
+            self.player.weapon.set_angle()
 
-    # Draw a solid blue circle in the center
-    pygame.draw.circle(screen, (0, 0, 255), (250, 250), 75)
+            if (pygame.mouse.get_pressed()[0]):
+                player_x, player_y = self.player.weapon.get_pos()
+                temp_proj = Projectile(player_x, player_y, self.player.weapon.get_angle())
+                projs.append(temp_proj)
 
-    test.set_angle()
+            for proj in projs:
+                proj.draw(self.screen, delta_time)
+                
 
-    if (pygame.mouse.get_pressed()[0]):
-        playerx,playery = test.get_pos()
-        temp_proj = Projectile(playerx, playery, test.get_angle())
-        projs.append(temp_proj)
+            self.player.weapon.draw(self.screen)
+            self.player.update()
 
-    for proj in projs:
-        proj.draw(screen, delta_time)
-        
+            self.screen.blit(self.player.img, self.player.rect)
+            # Flip the display
+            pygame.display.flip()
 
-    test.draw(screen)
+            self.clock.tick(60)
 
-    # Flip the display
-    pygame.display.flip()
 
-    previous_time = time.perf_counter()
-    clock.tick(60)
+        pygame.quit()
 
-# Done! Time to quit.
-pygame.quit()
+game = Run()
+game.run()

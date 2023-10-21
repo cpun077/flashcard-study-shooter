@@ -25,7 +25,7 @@ PLAYER_H = 75
 class Run:
     def __init__(self):
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        pygame.display.set_caption("EduShoot")
+        pygame.display.set_caption("Flash Shoot")
         self.clock = pygame.time.Clock()
         self.player = Player(2000, 2000, PLAYER_W, PLAYER_H)
         self.bg = pygame.image.load("images/green_background.png").convert()

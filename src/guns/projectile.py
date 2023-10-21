@@ -13,17 +13,18 @@ class Projectile:
             self.img, (self.img.get_width() * 0.4, self.img.get_height() * 0.4)
         )
         self.angle = angle
+        self.img = pygame.transform.rotozoom(self.img, -math.degrees(self.angle), 1)
         self.tot_dis = 300
         self.dis_traveled = 0
         self.dead = False
         self.id = "proj"
-        self.img = pygame.transform.rotozoom(self.img, -math.degrees(self.angle), 1)
         self.nr = self.img.get_rect(center=self.img.get_rect(center=(self.x, self.y)).center)
 
     def move_projectile(self, delta_time):
         if self.angle != None:
             self.x += math.cos(self.angle) * self.velocity * delta_time
             self.y += math.sin(self.angle) * self.velocity * delta_time
+            self.nr = self.img.get_rect(center=self.img.get_rect(center=(self.x, self.y)).center)
             self.dis_traveled += self.velocity * delta_time
 
     def draw(self, screen, delta_time):

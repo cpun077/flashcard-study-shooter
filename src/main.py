@@ -3,6 +3,10 @@ import time
 from guns.pistol import Pistol
 from guns.projectile import Projectile
 from resources.player import Player
+from resources.ammo import Ammo
+from resources.rock import Rock
+from resources.tree import Tree
+from resources.shield import Shield
 
 pygame.init()
 

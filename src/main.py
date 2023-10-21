@@ -31,8 +31,9 @@ while running:
     # Draw a solid blue circle in the center
     pygame.draw.circle(screen, (0, 0, 255), (250, 250), 75)
 
-    if (event.type == pygame.MOUSEBUTTONDOWN):
-        test.set_angle()
+    test.set_angle()
+
+    if (pygame.mouse.get_pressed()[0]):
         playerx,playery = test.get_pos()
         temp_proj = Projectile(playerx, playery, test.get_angle())
         projs.append(temp_proj)

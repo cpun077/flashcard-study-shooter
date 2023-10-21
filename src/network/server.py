@@ -13,7 +13,7 @@ class Server:
         self.port = 8002
         self.addr = (self.host, self.port)
         self.sock.bind(self.addr)
-        self.sock.listen(10)
+        self.sock.listen(100)
         self.client_list = {}
         self.games = {}
         self.all_clients = {}

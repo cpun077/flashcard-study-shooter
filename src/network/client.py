@@ -37,7 +37,6 @@ class Client:
 
     def kill_client(self, sig, frame):
         self.sock.sendall("q".encode())
-        print("hi")
         self.sock.close()
         self.event.set()
         os._exit(-1)

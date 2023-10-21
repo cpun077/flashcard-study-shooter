@@ -2,18 +2,23 @@
 
 # Import and initialize the pygame library
 import pygame
+import time
 from guns.pistol import Pistol
 pygame.init()
 
 # Set up the drawing window
 screen = pygame.display.set_mode([500, 500])
 
+clock = pygame.time.Clock()
 test= Pistol(100, 100)
 
 # Run until the user asks to quit
 running = True
+previous_time = time.perf_counter()
 while running:
 
+    delta_time = time.perf_counter() - previous_time
+    previous_time = time.perf_counter()
     # Did the user click the window close button?
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -29,6 +34,8 @@ while running:
 
     # Flip the display
     pygame.display.flip()
+
+    clock.tick(60)
 
 # Done! Time to quit.
 pygame.quit()

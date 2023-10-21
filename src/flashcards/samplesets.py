@@ -1,11 +1,7 @@
 import json
 
-def sampleSet(num) :
-    if (num == 0) :
-        return basicset
-
-    if (num == 1) :
-        return recycleset
+def sampleSet() :
+    return [basicset, recycleset]
 
 basicset = [
     {"t": "term1", "d": "def1"},
@@ -26,5 +22,3 @@ recycleset = [
     {"t": "Inkjet Printer Cartridges", "d": "Recycle them yourself or return them to the manufacturer."},
     {"t": "Cleaning solutions and solvents", "d": "consult MSDS, licensed disposal agency, or local authorities for proper disposal procedures."}
 ]
-
-_all_ = sampleSet

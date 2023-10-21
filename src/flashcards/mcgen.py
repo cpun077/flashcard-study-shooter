@@ -1,5 +1,4 @@
 import random
-import samplesets 
 from pprint import pprint
 
 def createQuiz(deck):
@@ -50,5 +49,3 @@ def createQuiz(deck):
     print('finished creating quiz:')
     pprint(newquiz)
     return newquiz
-
-createQuiz(samplesets.sampleSet(0))

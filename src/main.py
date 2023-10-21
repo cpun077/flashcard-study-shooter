@@ -136,6 +136,22 @@ class Run:
             if (tree.x > self.player.x - WIDTH/1.5 and tree.x < self.player.x + WIDTH/1.5 and tree.y < self.player.y + HEIGHT/1.5 and tree.y > self.player.y - HEIGHT/1.5):
                 self.screen.blit(tree.img, (tree.x - self.player.x + WIDTH / 2 - tree.w / 2, tree.y - self.player.y + HEIGHT / 2 - tree.h / 2))
 
+    def ammo_shield(self):
+        for i, ammo in enumerate(self.game_state.ammo):
+            if (self.player.get_rect().colliderect(pygame.Rect(ammo.x, ammo.y, self.game_state.ammo_size, self.game_state.ammo_size))):
+                correct = self.player.quiz(self.screen)
+                if (correct):
+                    self.game_state.ammo[i] = 0
+                    self.player.weapon.ammo += 15
+        self.game_state.ammo = list(filter(lambda a: a != 0, self.game_state.ammo))
+        for i, shield in enumerate(self.game_state.shields):
+            if (self.player.get_rect().colliderect(pygame.Rect(shield.x, shield.y, self.game_state.ammo_size, self.game_state.ammo_size))):
+                correct = self.player.quiz(self.screen)
+                if (correct):
+                    self.game_state.shields[i] = 0
+                    self.player.health += 100
+        self.game_state.shields = list(filter(lambda a: a != 0, self.game_state.shields))
+
     def get_info(self):
         while True:
             try:
@@ -176,6 +192,7 @@ class Run:
             self.client.send(self.game_state.send_myinfo([self.player, self.projectiles]))
 
             self.player.draw(self.screen)
+            self.ammo_shield()
             self.draw_bar(progress=self.player.health/100)
             self.player.weapon.draw(self.screen)
             self.render_game_state()

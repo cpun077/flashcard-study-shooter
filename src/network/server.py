@@ -9,7 +9,7 @@ class Server:
     def __init__(self):
         self.event = threading.Event()
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.host = "0.0.0.0"
+        self.host = "localhost"
         self.port = 6001
         self.addr = (self.host, self.port)
         self.sock.bind(self.addr)

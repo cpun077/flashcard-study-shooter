@@ -9,7 +9,7 @@ class Client:
     def __init__(self, name):
         self.event = threading.Event()
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.host = "10.41.253.88"
+        self.host = "localhost"
         self.port = 6001
         self.addr = (self.host, self.port)
         self.name = name

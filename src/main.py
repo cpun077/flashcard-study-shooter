@@ -23,7 +23,7 @@ class Run:
 
 
     def run(self):
-        a = Ammo(500, 500, 20, 20)
+        a = Rock(500, 500, 100, 100)
         previous_time = time.perf_counter()
         running = True
         projs = []

@@ -1,4 +1,5 @@
 import threading
+from GameState import GameState
 
 class Game:
     def __init__(self, client_list, all_clients):

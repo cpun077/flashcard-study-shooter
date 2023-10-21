@@ -29,7 +29,8 @@ class Run:
         self.localx = 0
         self.localy = 0
         self.game_state = GameState()
-        self.game_state.initialize_random(5000)
+        self.game_state.initialize_random(1000)
+        
         #self.bg = self.background
 
 

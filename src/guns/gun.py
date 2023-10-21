@@ -16,9 +16,22 @@ class Gun:
         self.fire_rate = fire_rate
         self.nr = self.drawn_img.get_rect(center=(self.x, self.y))
         self.rotate_m = False
+        self.time_since_fire = 0
 
-    def shoot(self):
-        self.ammo -= self.ammo
+    def increase_time(self, dt):
+        self.time_since_fire += dt
+
+    def can_shoot(self):
+        if(self.time_since_fire >= self.fire_rate):
+            self.time_since_fire = 0
+        else:
+            return False
+
+        if(self.ammo > 0):
+            self.ammo -= 1
+        else:
+            return False
+        return True
 
     def set_angle(self):
         mouse = pygame.mouse.get_pos()

@@ -20,16 +20,15 @@ class Run:
         self.clock = pygame.time.Clock()
         self.player = Player(600, 400, 50, 50)
 
-
-
     def run(self):
-        a = Shield(500, 500, 70, 70)
+        a = Tree(500, 500, 70, 70)
         previous_time = time.perf_counter()
         running = True
         projs = []
         while running:
             delta_time = time.perf_counter() - previous_time
             previous_time = time.perf_counter()
+            self.player.weapon.increase_time(delta_time)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -40,8 +39,9 @@ class Run:
 
             if (pygame.mouse.get_pressed()[0]):
                 player_x, player_y = self.player.weapon.get_pos()
-                temp_proj = Projectile(player_x, player_y, self.player.weapon.get_angle())
-                projs.append(temp_proj)
+                if(self.player.weapon.can_shoot()):
+                    temp_proj = Projectile(player_x, player_y, self.player.weapon.get_angle())
+                    projs.append(temp_proj)
 
             for proj in projs:
                 proj.draw(self.screen, delta_time)

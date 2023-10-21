@@ -21,7 +21,9 @@ class Run:
         self.player = Player(600, 400, 50, 50)
 
 
+
     def run(self):
+        a = Ammo(500, 500, 20, 20)
         previous_time = time.perf_counter()
         running = True
         projs = []
@@ -48,6 +50,7 @@ class Run:
             self.player.update()
 
             self.screen.blit(self.player.img, self.player.rect)
+            self.screen.blit(a.img, a.rect)
             # Flip the display
             pygame.display.flip()
 

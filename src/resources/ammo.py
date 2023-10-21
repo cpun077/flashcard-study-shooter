@@ -11,9 +11,12 @@ class Ammo:
 		self.rect = self.img.get_rect()
 		self.rect.center = (w / 2, h / 2)
 
-		
 	def draw():
 		pass
 
 	def load():
 		pass
+
+	def get_rect(self):
+		return pygame.Rect(self.x, self.y, self.w, self.h)
+		

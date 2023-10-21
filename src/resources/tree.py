@@ -16,3 +16,6 @@ class Tree:
 
 	def load():
 		pass
+
+	def get_rect(self):
+		return pygame.Rect(self.x, self.y, self.w, self.h)

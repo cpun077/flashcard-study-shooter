@@ -11,6 +11,8 @@ class Player:
 		self.angle = 0
 		self.x = x
 		self.y = y
+		self.w = w
+		self.h = h
 		self.speed = 200
 		self.img = pygame.image.load("images/player.png")
 		self.img = pygame.transform.smoothscale(self.img.convert_alpha(), (w, h))
@@ -77,3 +79,6 @@ class Player:
 
 	def update(self, dt):
 		self.move(dt)
+
+	def get_rect(self):
+		return pygame.Rect(self.x, self.y, self.w, self.h)

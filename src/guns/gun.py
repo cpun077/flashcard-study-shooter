@@ -39,6 +39,15 @@ class Gun:
             self.prev_angle = self.angle
             self.angle = 0
         screen.blit(self.drawn_img, self.nr)
+    
+    def setx(self, distance):
+        self.x += distance
+        self.nr = self.drawn_img.get_rect(center=(self.x, self.y))
+
+    def sety(self, distance):
+        self.y += distance
+        self.nr = self.drawn_img.get_rect(center=(self.x, self.y))
+
 
     def get_angle(self):
         return(self.angle)

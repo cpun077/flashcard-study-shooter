@@ -12,8 +12,9 @@ class Projectile:
         self.img = pygame.transform.smoothscale(
             self.img, (self.img.get_width() * 0.4, self.img.get_height() * 0.4)
         )
-        self.img.convert_alpha()
         self.angle = angle
+        self.img = pygame.transform.rotozoom(self.img, -math.degrees(self.angle), 1)
+        self.img.convert_alpha()
         self.tot_dis = 300
         self.dis_traveled = 0
         self.dead = False

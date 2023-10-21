@@ -4,7 +4,9 @@ import pygame
 
 
 class Projectile:
-    def __init__(self, starting_x, starting_y, angle):
+    def __init__(self, starting_x, starting_y, angle, gx, gy):
+        self.gx = gx
+        self.gy = gy
         self.x = starting_x
         self.y = starting_y
         self.velocity = 800
@@ -19,6 +21,7 @@ class Projectile:
         self.dis_traveled = 0
         self.dead = False
         self.id = "proj"
+        self.damage = 10
 
     def move_projectile(self, delta_time):
         if self.angle != None:

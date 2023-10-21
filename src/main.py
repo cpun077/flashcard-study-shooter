@@ -38,7 +38,7 @@ class Run:
         self.localy = 0
         self.client = Client(sys.argv[1])
         self.client.start()
-        self.opp_state = [[0, 0, 0], []]
+        self.opp_queue = []
         self.game_state = GameState()
         self.game_state.decode_initial_data(self.client.recv())
 
@@ -47,7 +47,10 @@ class Run:
 
         #self.bg = self.background
 
-
+        self.b_img = pygame.image.load("images/bullet.png").convert_alpha()
+        self.b_img = pygame.transform.smoothscale(
+            self.b_img, (self.b_img.get_width() * 0.4, self.b_img.get_height() * 0.4)
+        )
         self.projectiles = []
 
     def shoot_bullets(self):
@@ -58,7 +61,7 @@ class Run:
 
                 player_x, player_y = self.player.weapon.get_pos()
                 if(self.player.weapon.can_shoot()):
-                    temp_proj = Projectile(player_x, player_y, self.player.weapon.get_angle())
+                    temp_proj = Projectile(player_x, player_y, self.player.weapon.get_angle(), self.player.x, self.player.y)
                     self.projectiles.append(temp_proj)
 
     def render_projectiles(self, delta_time):
@@ -71,6 +74,9 @@ class Run:
                 self.projectiles[i] = 0
         while 0 in self.projectiles:
             self.projectiles.remove(0)
+        if(self.player.health <= 0):
+            print("YOU DIED")
+            return -1
 
     # inspired by Steve Paget pygame functions
     def render_background(self):
@@ -84,18 +90,37 @@ class Run:
         self.screen.blit(self.bg, (xOff, yOff + HEIGHT))
         self.screen.blit(self.bg, (xOff + WIDTH, yOff + HEIGHT))
 
-    def display_stuff(self):
-        player = self.opp_state[0]
-        projectiles = self.opp_state[1]
-        x, y, angle = player
-        p_img = self.player.img
-        rotImg = pygame.transform.rotozoom(p_img, -math.degrees(angle), 1)
-        newR = rotImg.get_rect(center=p_img.get_rect(center=(x - self.player.x + WIDTH / 2, y - self.player.y + HEIGHT / 2)).center)
-        self.screen.blit(rotImg, newR)
+    def draw_bar(self, pos=(WIDTH / 2 - 40, HEIGHT / 2 - 40), size = (PLAYER_W, 15), borderC=(0, 0, 0), barC=(0, 255, 0), progress=1):
 
-        for proj in projectiles:
-            x, y, angle = proj
-            print(x, y, angle)
+        pygame.draw.rect(self.screen, borderC, (*pos, *size), 1)
+        innerPos  = (pos[0]+3, pos[1]+3)
+        innerSize = ((size[0]-6) * progress, size[1]-6)
+        pygame.draw.rect(self.screen, barC, (*innerPos, *innerSize))
+
+    def display_stuff(self):
+        for opp_state in self.opp_queue:
+            player = opp_state[0]
+            projectiles = opp_state[1]
+            if player:
+                x, y, angle, h = player
+                p_img = self.player.img
+                rotImg = pygame.transform.rotozoom(p_img, -math.degrees(angle), 1)
+                screenx = x - self.player.x + WIDTH / 2
+                screeny = y - self.player.y + HEIGHT / 2
+                newR = rotImg.get_rect(center=p_img.get_rect(center=(screenx, screeny)).center)
+                self.screen.blit(rotImg, newR)
+                self.draw_bar(pos=(screenx - 40, screeny - 40), progress=h/100)
+
+            for projectile in projectiles:
+                x, y, angle = projectile
+                b_img = self.b_img
+                rotImg = pygame.transform.rotozoom(b_img, -math.degrees(angle), 1)
+                newR = rotImg.get_rect(center=b_img.get_rect(center=(x - self.player.x + WIDTH / 2, y - self.player.y + HEIGHT / 2)).center)
+                b_rec = pygame.Rect(x, y, b_img.get_width(), b_img.get_height())
+                if(self.player.get_rect().colliderect(b_rec)):
+                    self.player.health -= 1
+                self.screen.blit(rotImg, newR)
+        self.opp_queue = self.opp_queue[-2:]
 
     def render_game_state(self):
         for ammo in self.game_state.ammo:
@@ -114,9 +139,19 @@ class Run:
     def get_info(self):
         while True:
             try:
-                f = self.client.recv()
-                self.opp_state = eval(f)
-            except:
+                data = self.client.recv()
+                if not data:
+                    print("bad")
+                    continue
+                while (data.find("]][[") != -1):
+                    index = data.find("]][[")
+                    self.opp_queue.append(eval(data[:(index+ 2)]))
+                    data = data[(index + 2):]
+                self.opp_queue.append(eval(data))
+            except Exception as e:
+                print("This:", e)
+                print("next:", data)
+                print("\n")
                 continue
 
     def run(self):
@@ -141,15 +176,19 @@ class Run:
             self.client.send(self.game_state.send_myinfo([self.player, self.projectiles]))
 
             self.player.draw(self.screen)
+            self.draw_bar(progress=self.player.health/100)
             self.player.weapon.draw(self.screen)
             self.render_game_state()
             self.display_stuff()
-            self.kill_objects()
+            a = self.kill_objects()
+            if a == -1:
+                running = False
 
             pygame.display.flip()
 
             self.clock.tick(60)
 
+        pygame.display.quit()
         pygame.quit()
 
 game = Run()

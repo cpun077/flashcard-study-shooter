@@ -26,9 +26,14 @@ class Game:
                     del self.all_clients[client_socket]
                     client_socket.close()
                     return
+                data = data.decode()
+                if(data.find("]][[") != -1):
+                    data = data[:(data.find("]][[") + 2)]
+                data = data.encode()
                 self.broadcast(data, client_socket)
 
             except Exception as e:
+                print(e)
                 del self.client_list[client_socket]
                 client_socket.close()
                 return

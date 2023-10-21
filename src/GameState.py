@@ -7,6 +7,7 @@ import pygame
 pygame.init()
 
 WORLD_WIDTH, WORLD_HEIGHT = (10000, 10000)
+WIDTH, HEIGHT = (1200, 800)
 class GameState:
 	def __init__(self):
 		self.ammo = []
@@ -98,10 +99,10 @@ class GameState:
 
 	def send_myinfo(self, data):
 		player, projectile = data
-		p = [round(player.x), round(player.y), player.angle]
+		p = [round(player.x), round(player.y), player.angle, player.health]
 		proj = []
 		for pr in projectile:
-			proj.append([round(pr.x), round(pr.y), pr.angle])
+			proj.append([round(pr.gx - WIDTH / 2 + pr.x), round(pr.gy - HEIGHT / 2 + pr.y), pr.angle])
 		return str([p, proj])
 
 	def get_xy(self, st):

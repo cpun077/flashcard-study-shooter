@@ -10,7 +10,7 @@ class Client:
         self.event = threading.Event()
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.host = "10.41.253.88"
-        self.port = 6000
+        self.port = 6001
         self.addr = (self.host, self.port)
         self.name = name
 
@@ -30,7 +30,9 @@ class Client:
                 self.sock.close()
                 os._exit(1)
                 return
-        except:
+        except Exception as e:
+            print(e)
+            print("here")
             self.sock.close()
             os._exit(1)
             return

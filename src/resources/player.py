@@ -24,6 +24,8 @@ class Player:
 		self.y_offset = 0
 		self.dir_x = 0
 		self.dir_y = 0
+		self.health = 100
+		self.max_health = 100
 
 	def set_angle(self):
 		mouse = pygame.mouse.get_pos()

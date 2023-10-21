@@ -10,7 +10,7 @@ class Server:
         self.event = threading.Event()
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.host = "0.0.0.0"
-        self.port = 6000
+        self.port = 6001
         self.addr = (self.host, self.port)
         self.sock.bind(self.addr)
         self.sock.listen(100)
@@ -20,7 +20,7 @@ class Server:
 
     def queue_handler(self):
         while True:
-            if len(self.client_list) >= 3:
+            if len(self.client_list) >= 2:
                 game = Game(dict(self.client_list), self.all_clients)
                 game.start()
                 self.client_list.clear()

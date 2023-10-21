@@ -33,12 +33,14 @@ class Gun:
             return False
         return True
 
-    def set_angle(self):
+    def set_angle(self, player):
         mouse = pygame.mouse.get_pos()
         xdiff = mouse[0] - self.x
         ydiff = mouse[1] - self.y
         self.angle = math.atan2(ydiff, xdiff)
         self.rotate_m = True
+        #self.x = self.x + player.get_width() * math.cos(self.angle)
+        #self.y = self.y + player.get_height() * math.sin(self.angle)
 
     def rot(self):
         rotImg = pygame.transform.rotozoom(self.img, -math.degrees(self.angle), 1)
